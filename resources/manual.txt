@@ -1,0 +1,34 @@
+Device Name: X200 Smart Controller
+Firmware Version: 3.2.1
+
+=== Setup Instructions ===
+1. Unbox the device and ensure all accessories are present.
+2. Connect the device to a stable power source using the included adapter.
+3. Download the X200 Control App from the official website or app store.
+4. Open the app and follow the on-screen pairing instructions.
+
+=== Wi-Fi Configuration ===
+- Navigate to Settings > Network.
+- Select your Wi-Fi SSID and enter the password.
+- Wait for the device to connect. A green LED will confirm successful connection.
+
+=== Factory Reset Procedure ===
+If the device becomes unresponsive, follow these steps to perform a factory reset:
+1. Hold the RESET button for 10 seconds.
+2. Wait until the LED flashes red three times.
+3. Release the button and allow 30 seconds for the reset to complete.
+
+=== Safety Guidelines ===
+- Do not expose the device to moisture or extreme temperatures.
+- Keep away from children and pets.
+- Use only the provided power adapter.
+
+=== Troubleshooting ===
+Problem: Device not connecting to Wi-Fi  
+Solution: Ensure you're using a 2.4GHz network and that the password is correct.
+
+Problem: App not detecting device  
+Solution: Restart both the device and the app, and make sure Bluetooth is enabled on your phone.
+
+=== Contact Support ===
+Visit https://support.x200smart.com or email help@x200smart.com

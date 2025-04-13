@@ -1,0 +1,33 @@
+# Core LLM and Agent Framework
+langchain
+langchain-community
+langchain-huggingface
+langchain-ollama
+openai
+ollama
+
+# Vector Store (in-memory or persistent)
+chromadb>=0.4.0
+
+# Embeddings (if using OpenAI)
+tiktoken>=0.5.1
+
+# Document loaders (plain text, PDF, etc.)
+unstructured>=0.10.0
+pdfminer.six>=20221105
+
+# Optional: local models via Hugging Face (if not using OpenAI)
+transformers>=4.38.0
+sentence-transformers>=2.2.2
+
+# Utility packages
+python-dotenv  # for managing OpenAI API keys via .env file
+
+# Optional: FAISS as a fallback or alternative to Chroma
+faiss-cpu>=1.7.4
+
+# More
+torch
+accelerate
+
+
