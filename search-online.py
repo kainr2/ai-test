@@ -1,8 +1,7 @@
-import requests
 import os
 
 from dotenv import load_dotenv
-from langchain.agents import Tool, initialize_agent, AgentType, AgentExecutor
+from langchain.agents import Tool, initialize_agent, AgentType
 from langchain_ollama import OllamaLLM
 from langchain.memory import ConversationBufferMemory
 
@@ -44,10 +43,6 @@ agent = initialize_agent(tools,
                          agent=AgentType.CONVERSATIONAL_REACT_DESCRIPTION, 
                          memory=memory,
                          verbose=True)
-
-# # Example query
-# response = agent.run("Who is the current president of the United States as of April 2025?")
-# print(response)
 
 # Loop to continuously get user input
 while True:
