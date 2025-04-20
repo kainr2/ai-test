@@ -1,16 +1,21 @@
 import requests
 
-from langchain.agents import Tool, initialize_agent, AgentType
+from langchain.agents import Tool
 
-
+# Search List:
+# * <https://brave.com/search/api/>
+# * <https://tavily.com/#pricing>
 class GoogleSearch:
 
     def __init__(self, api_key: str, search_engine_id: str):
         self.api_key = api_key
         self.search_engine_id = search_engine_id
 
-    # https://programmablesearchengine.google.com/about/
     def search(self, query: str) -> str:
+        """
+        Search the web using DuckDuckGo API and return the abstract text or description.
+        """
+        # https://programmablesearchengine.google.com/about/
         url = "https://www.googleapis.com/customsearch/v1"
         params = {
             "key": self.api_key,

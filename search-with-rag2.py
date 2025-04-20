@@ -1,53 +1,50 @@
-import requests
 import os
 
 from dotenv import load_dotenv
-from langchain.agents import Tool, initialize_agent, AgentType, AgentExecutor
+from langchain.agents import initialize_agent, AgentType
 from langchain_ollama import OllamaLLM
 from langchain.memory import ConversationBufferMemory
 
 from tools.google_search import GoogleSearch
+from tools.rag_file import RagFile
+
 
 
 # Load config
 load_dotenv()
+
+# List of tools
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 GOOGLE_SEARCH_ENGINE_ID = os.getenv("GOOGLE_SEARCH_ENGINE_ID")
+file_path = "resources/manual.txt"   
 
+tool_rag_file = RagFile(file_path)
+tools = [
+    GoogleSearch(GOOGLE_API_KEY, GOOGLE_SEARCH_ENGINE_ID).create_tool(),
+    tool_rag_file.create_tool(),
+]
 
-# Search List:
-# * <https://brave.com/search/api/>
-# * <https://tavily.com/#pricing>
-#
-google_tool = GoogleSearch(GOOGLE_API_KEY, GOOGLE_SEARCH_ENGINE_ID).create_tool()
 
 ## LLM 
 try:
-    #llm = OllamaLLM(model="llama3.2:latest")
-    llm = OllamaLLM(model="deepseek-r1:14b")
+    llm = OllamaLLM(model="llama3.2:latest")
 except Exception as e:
     raise RuntimeError(f"Failed to initialize the LLM: {e}")
 
-# Search tools
-tools = [google_tool]
+
 # Chat Memory for context
 memory = ConversationBufferMemory(memory_key="chat_history", 
                                   return_messages=True,
                                   max_memory=5)
 
 # Agents
-# single call, no memory
-#agent = initialize_agent(tools, llm, agent_type=AgentType.ZERO_SHOT_REACT_DESCRIPTION, verbose=True)
-# keep conversation history
-agent = initialize_agent(tools, 
-                         llm, 
+agent = initialize_agent(tools=tools, 
+                         llm=llm, 
                          agent=AgentType.CONVERSATIONAL_REACT_DESCRIPTION, 
                          memory=memory,
+                         handle_parsing_errors=True,
+                         max_iterations=3,
                          verbose=True)
-
-# # Example query
-# response = agent.run("Who is the current president of the United States as of April 2025?")
-# print(response)
 
 # Loop to continuously get user input
 while True:
@@ -56,9 +53,7 @@ while True:
     if query.lower() in ['exit', 'quit']:
         print("Exiting the program. Goodbye!")
         break
-    # Run the query
     response = agent.invoke({"input": query})
-
     print("...")
     print(f"Answer: {response}")
     print("...")

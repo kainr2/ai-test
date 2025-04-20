@@ -1,13 +1,17 @@
 import requests
 
 from langchain.agents import Tool
+from langchain_core.tools import tool
 
 
 class DuckDuckGoSearch:
     DUCKDUCKGO_API_URL = "https://api.duckduckgo.com/"
 
-    # Custom function to query DuckDuckGo API
+    @tool
     def search(self, query: str) -> str:
+        """
+        Search the web using DuckDuckGo API and return the abstract text or description.
+        """
         params = {
             "q": query,
             "format": "json",  # Return results in JSON format
