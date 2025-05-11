@@ -32,4 +32,8 @@ faiss-cpu>=1.7.4
 torch
 accelerate
 
+# tracing lmnr[all]
+lmnr[all]
 
+# Compatibility
+onnxruntime==1.21.1

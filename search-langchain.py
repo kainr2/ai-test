@@ -1,31 +1,25 @@
 import os
-import requests
 
-from dotenv import load_dotenv
-from langchain.agents import initialize_agent, AgentType
 from langchain_ollama import OllamaLLM
 from langchain_openai import ChatOpenAI
 from langchain_ollama.chat_models import ChatOllama
-
-
-from langchain_core.runnables import RunnableLambda
 from langchain_core.language_models import BaseLLM
 
-from langgraph.prebuilt import create_react_agent
-from langgraph.graph.message import MessageGraph
 from langgraph.graph.state import CompiledStateGraph
-from langchain.schema import HumanMessage
 from langgraph.graph import START, StateGraph
-from langgraph.prebuilt import tools_condition, ToolNode
 from langgraph.graph import MessagesState
+from langgraph.prebuilt import tools_condition, ToolNode
 from langchain_core.messages import SystemMessage
+from langchain_core.messages import AIMessage, HumanMessage, ToolMessage, FunctionMessage
 
 # local tools
 from tools.google_search import GoogleSearch
 from tools.rag_file import RagFile
 from langchain_core.tools import tool
 
+
 # Load config
+from dotenv import load_dotenv
 load_dotenv()
 
 # Create tools
@@ -94,7 +88,6 @@ def assistant(state: MessagesState):
 # Create agent for LangGraph
 def create_agent(tools: dict) -> CompiledStateGraph:
     """Create a LangGraph agent with the specified LLM and tools."""
-
     builder = StateGraph(MessagesState)
     builder.add_node("assistant", assistant)    # Assistant node
     builder.add_node("tools", ToolNode(tools))  # Tools node
@@ -115,7 +108,6 @@ def print_after_done(agent_executor, messages):
     for msg in result["messages"]:
         msg.pretty_print()
 
-from langchain_core.messages import AIMessage, HumanMessage, ToolMessage, FunctionMessage
 def print_each_step(agent_executor, messages):
     print("Starting agent execution...")
     counter = 0
@@ -128,7 +120,9 @@ def print_each_step(agent_executor, messages):
         # print only the new message(s)
         if messages:
             last_msg = messages[-1]
-            if isinstance(last_msg, AIMessage):
+            if not last_msg.content:
+                print("❓ No content in the last message.")
+            elif isinstance(last_msg, AIMessage):
                 print("🤖 AI:", last_msg.content)
             elif isinstance(last_msg, ToolMessage):
                 print("🔧 Tool:", last_msg.content)
@@ -139,8 +133,8 @@ def print_each_step(agent_executor, messages):
 
 
 # Query and print the result
-#user_input = input("Enter your query: ")
-user_input = "where can i download the openai codex cli?"
+user_input = input("Enter your query: ")
+#user_input = "where can i download the openai codex cli?"
 messages = [HumanMessage(content=user_input),]
 print_each_step(agent_executor, messages)
 #print_after_done(agent_executor, messages)
